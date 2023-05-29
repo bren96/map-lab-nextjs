@@ -16,7 +16,7 @@ interface Props {
 export async function getActiveUsers({
   roomId,
 }: Props): Promise<FetchApiResult<RoomActiveUser[]>> {
-  const url = `/v2/rooms/${roomId}/active_users`;
+  const url = `/rooms/${roomId}/active_users`;
 
   const { data, error } = await fetchLiveblocksApi<{ data: RoomActiveUser[] }>(
     url

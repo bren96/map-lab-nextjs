@@ -29,7 +29,7 @@ export async function authorize({
   groupIds,
   userInfo,
 }: Props): Promise<FetchApiResult<{ token: string }>> {
-  const url = `/v2/rooms/${roomId}/authorize`;
+  const url = `/rooms/${roomId}/authorize`;
 
   const payload = JSON.stringify({
     roomId,

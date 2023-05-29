@@ -16,7 +16,7 @@ interface Props {
 export async function deleteStorage({
   roomId,
 }: Props): Promise<FetchApiResult<Room>> {
-  const url = `/v2/rooms/${roomId}/storage`;
+  const url = `/rooms/${roomId}/storage`;
   return fetchLiveblocksApi<Room>(url, {
     method: "DELETE",
   });

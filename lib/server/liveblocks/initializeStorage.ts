@@ -20,7 +20,7 @@ export async function initializeStorage({
   roomId,
   storage,
 }: Props): Promise<FetchApiResult<GetStorageResponse>> {
-  const url = `/v2/rooms/${roomId}/storage`;
+  const url = `/rooms/${roomId}/storage`;
 
   const payload = storage ? JSON.stringify(storage) : undefined;
 

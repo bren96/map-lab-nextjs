@@ -1,27 +1,32 @@
+# map-lab-nextjs
 
+MAP-LAB client and server using NextJS. Built using
+[Next.js Liveblocks Starter Kit](https://liveblocks.io/starter-kit).
 
-https://user-images.githubusercontent.com/33033422/216776250-04ef297b-f61a-42ec-a7b9-b08e46dddf8f.mp4
+## Installation
 
-# [Next.js Starter Kit](https://liveblocks.io/starter-kit)
+`npm i`
 
-<p>
-  <a href="https://codesandbox.io/s/github/liveblocks/liveblocks/tree/main/starter-kits/nextjs-starter-kit">
-    <img src="https://img.shields.io/badge/open%20in%20codesandbox-message?style=flat&logo=codesandbox&color=333&logoColor=fff" alt="Open in CodeSandbox" />
-  </a>
-  <img src="https://img.shields.io/badge/react-message?style=flat&logo=react&color=0bd&logoColor=fff" alt="React" />
-  <img src="https://img.shields.io/badge/next.js-message?style=flat&logo=next.js&color=07f&logoColor=fff" alt="Next.js" />
-</p>
+## Setup
 
-Kickstart start your collaborative Next.js app with this starter kit.
+Create `.env.local`, add values from providers.
 
-## Features
+```
+AUTH0_CLIENT_ID=XXX
+AUTH0_CLIENT_SECRET=XXX
+AUTH0_ISSUER_BASE_URL=XXX
+LIVEBLOCKS_SECRET_KEY=XXX
+NEXTAUTH_SECRET=XXX
+```
 
-- Documents dashboard with pagination, drafts, groups, auto-revalidation
-- Collaborative whiteboard app with a fully-featured share menu
-- Authentication compatible with GitHub, Google, Auth0, and more
-- Document permissions can be scoped to users, groups, and the public
+For more info:
 
-## Get started
+- https://liveblocks.io/docs/guides/nextjs-starter-kit#authentication
+- https://next-auth.js.org/configuration/options#secret
+- https://liveblocks.io/docs/api-reference/rest-api-endpoints
 
-[Read the guide](http://liveblocks.io/docs/guides/nextjs-starter-kit) to get
-started.
+## Development
+
+`npm run dev`
+
+Go to `http://localhost:3000/`.

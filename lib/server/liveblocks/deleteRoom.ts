@@ -16,7 +16,7 @@ interface Props {
 export async function deleteRoom({
   roomId,
 }: Props): Promise<FetchApiResult<Room>> {
-  const url = `/v2/rooms/${roomId}`;
+  const url = `/rooms/${roomId}`;
   return fetchLiveblocksApi<Room>(url, {
     method: "DELETE",
   });

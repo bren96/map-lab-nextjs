@@ -1,7 +1,7 @@
 // Liveblocks API base url
 import { getProviders } from "next-auth/react";
 
-export const API_BASE_URL = "https://api.liveblocks.io";
+export const API_BASE_URL = "https://api.liveblocks.io/v2";
 
 // Your Liveblocks secret key
 export const SECRET_API_KEY = process.env.LIVEBLOCKS_SECRET_KEY;

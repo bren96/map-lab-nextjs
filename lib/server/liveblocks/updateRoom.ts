@@ -28,7 +28,7 @@ export async function updateRoom({
   groupsAccesses,
   defaultAccesses,
 }: Props): Promise<FetchApiResult<Room>> {
-  const url = `/v2/rooms/${roomId}`;
+  const url = `/rooms/${roomId}`;
 
   let payload = {};
 

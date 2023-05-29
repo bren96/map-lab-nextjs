@@ -17,7 +17,7 @@ interface Props {
 export async function getStorage({
   roomId,
 }: Props): Promise<FetchApiResult<GetStorageResponse>> {
-  const url = `/v2/rooms/${roomId}/storage`;
+  const url = `/rooms/${roomId}/storage`;
 
   const { data, error } = await fetchLiveblocksApi<GetStorageResponse>(url);
 

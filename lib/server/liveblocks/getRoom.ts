@@ -16,6 +16,6 @@ interface Props {
 export async function getRoom({
   roomId,
 }: Props): Promise<FetchApiResult<Room>> {
-  const url = `/v2/rooms/${roomId}`;
+  const url = `/rooms/${roomId}`;
   return fetchLiveblocksApi<Room>(url);
 }

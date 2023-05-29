@@ -28,7 +28,7 @@ export async function getRooms({
   groupIds,
   metadata,
 }: Props): Promise<FetchApiResult<GetRoomsResponse>> {
-  let url = `/v2/rooms?`;
+  let url = `/rooms?`;
 
   if (limit) {
     url += `&limit=${limit}`;

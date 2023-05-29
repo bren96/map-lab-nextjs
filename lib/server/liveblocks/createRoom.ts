@@ -33,7 +33,7 @@ export async function createRoom({
   groupsAccesses,
   defaultAccesses = [],
 }: Props): Promise<FetchApiResult<Room>> {
-  const url = "/v2/rooms";
+  const url = "/rooms";
 
   const payload = JSON.stringify({
     id,
