@@ -1,0 +1,38 @@
+.profilePopover {
+  display: flex;
+  min-width: 180px;
+  max-width: 320px;
+  flex-direction: column;
+}
+
+.profilePopoverInfo {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-6) var(--space-7);
+}
+
+.profilePopoverName,
+.profilePopoverId {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profilePopoverName {
+  font-weight: 500;
+}
+
+.profilePopoverId {
+  color: var(--color-text-lighter);
+  font-size: var(--size-sm);
+}
+
+.profilePopoverActions {
+  padding: var(--space-3);
+}
+
+.profilePopoverButton {
+  width: 100%;
+  place-content: center;
+}
