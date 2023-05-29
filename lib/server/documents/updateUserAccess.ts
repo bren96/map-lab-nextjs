@@ -1,7 +1,5 @@
 import { GetServerSidePropsContext } from "next";
-import { DOCUMENT_URL } from "../../../constants";
 import {
-  Document,
   DocumentUser,
   FetchApiResult,
   RoomAccess,
@@ -11,9 +9,7 @@ import {
 import { getServerSession } from "../auth";
 import { getUser } from "../database";
 import { getRoom, updateRoom } from "../liveblocks";
-import { notify } from "../notify";
 import {
-  buildDocument,
   buildDocumentUsers,
   documentAccessToRoomAccesses,
   isUserDocumentOwner,
@@ -136,18 +132,6 @@ export async function updateUserAccess(
       },
     };
   }
-
-  // Send email to user notifying that they've been added or their permission has been changed
-  const updatedDocument: Document = buildDocument(updatedRoom);
-  const documentUrl = `${req.headers.origin}${DOCUMENT_URL(
-    updatedDocument.type,
-    updatedDocument.id
-  )}`;
-  notify({
-    to: userId,
-    subject: `Permission changed in document ${updatedDocument.name}`,
-    html: `In <a href="${documentUrl}">${updatedDocument.name}</a> your permission level has changed to <strong>${access}</strong>.`,
-  });
 
   // If update successful, return the new list of collaborators
   const result: DocumentUser[] = await buildDocumentUsers(

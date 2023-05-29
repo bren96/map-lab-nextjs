@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { GetServerSideProps } from "next";
 import { ComponentProps, ReactNode } from "react";
-import { DASHBOARD_URL } from "../constants";
 import { SignInIcon } from "../icons";
 import { MarketingLayout } from "../layouts/Marketing";
 import { signIn } from "next-auth/react";
@@ -120,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       redirect: {
         permanent: false,
-        destination: DASHBOARD_URL,
+        destination: "/dashboard",
       },
     };
   }

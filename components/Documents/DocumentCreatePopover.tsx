@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { ComponentProps } from "react";
-import { DOCUMENT_URL } from "../../constants";
 import { PlusIcon } from "../../icons";
 import { createDocument } from "../../lib/client";
 import { Button } from "../../primitives/Button";
@@ -45,7 +44,7 @@ export function DocumentCreatePopover({
     }
 
     const newDocument: Document = data;
-    router.push(DOCUMENT_URL(newDocument.type, newDocument.id));
+    router.push(`/${newDocument.type}/${newDocument.id}`);
   }
 
   return (

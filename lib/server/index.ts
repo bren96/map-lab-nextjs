@@ -2,7 +2,6 @@ export * from "./auth";
 export * from "./database";
 export * from "./documents";
 export * from "./liveblocks";
-export * from "./notify";
 export * from "./utils";
 
 // ============================================================================

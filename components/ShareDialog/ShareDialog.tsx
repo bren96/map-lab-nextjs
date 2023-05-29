@@ -40,22 +40,20 @@ export function ShareDialog({
   );
 
   // Get a list of users attached to the document (+ their info)
-  const {
-    data: users,
-    error: usersError,
-    mutate: revalidateUsers,
-  } = useDocumentsFunctionSWR([getDocumentUsers, { documentId }], {
-    refreshInterval: 0,
-  });
+  const { data: users, mutate: revalidateUsers } = useDocumentsFunctionSWR(
+    [getDocumentUsers, { documentId }],
+    {
+      refreshInterval: 0,
+    }
+  );
 
   // Get a list of groups attached to the document (+ their info)
-  const {
-    data: groups,
-    error: groupsError,
-    mutate: revalidateGroups,
-  } = useDocumentsFunctionSWR([getDocumentGroups, { documentId }], {
-    refreshInterval: 0,
-  });
+  const { data: groups, mutate: revalidateGroups } = useDocumentsFunctionSWR(
+    [getDocumentGroups, { documentId }],
+    {
+      refreshInterval: 0,
+    }
+  );
 
   // Get the current document
   const {

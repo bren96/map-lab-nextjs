@@ -1,11 +1,6 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { ComponentProps, useMemo } from "react";
-import {
-  DASHBOARD_DRAFTS_URL,
-  DASHBOARD_GROUP_URL,
-  DASHBOARD_URL,
-} from "../../constants";
 import { FileIcon, FolderIcon } from "../../icons";
 import { LinkButton } from "../../primitives/Button";
 import { Group } from "../../types";
@@ -54,12 +49,12 @@ export function DashboardSidebar({ className, groups, ...props }: Props) {
         <div className={styles.category}>
           <ul className={styles.list}>
             <li>
-              <SidebarLink href={DASHBOARD_URL} icon={<FileIcon />}>
+              <SidebarLink href="/dashboard" icon={<FileIcon />}>
                 All
               </SidebarLink>
             </li>
             <li>
-              <SidebarLink href={DASHBOARD_DRAFTS_URL} icon={<FileIcon />}>
+              <SidebarLink href="/dashboard/drafts" icon={<FileIcon />}>
                 Drafts
               </SidebarLink>
             </li>
@@ -72,7 +67,7 @@ export function DashboardSidebar({ className, groups, ...props }: Props) {
               return (
                 <li key={group.id}>
                   <SidebarLink
-                    href={DASHBOARD_GROUP_URL(group.id)}
+                    href={`/dashboard/group/${group.id}`}
                     icon={<FolderIcon />}
                   >
                     {group.name}

@@ -3,7 +3,6 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import Link from "next/link";
 import { ComponentProps, useCallback, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { DOCUMENT_URL } from "../../constants";
 import { DeleteIcon, MoreIcon } from "../../icons";
 import { getDocumentAccess, getGroups } from "../../lib/client";
 import { AvatarStack } from "../../primitives/AvatarStack";
@@ -61,12 +60,11 @@ export function DocumentRow({
         setGroups(groups);
       }
     }
-  }, [document]);
+  }, [document, accesses]);
 
   const [isMoreOpen, setMoreOpen] = useState(false);
 
   const date = new Date(lastConnection);
-  const url = DOCUMENT_URL(type, id);
 
   const handleDeleteDialogOpenChange = useCallback((isOpen: boolean) => {
     if (!isOpen) {
@@ -76,7 +74,10 @@ export function DocumentRow({
 
   return (
     <div className={clsx(className, styles.row)} {...props}>
-      <Link className={clsx(styles.container, styles.link)} href={url}>
+      <Link
+        className={clsx(styles.container, styles.link)}
+        href={`/${type}/${id}`}
+      >
         <div className={styles.icon}>
           <DocumentIcon type={type} />
         </div>
