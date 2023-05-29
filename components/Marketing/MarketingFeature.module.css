@@ -1,0 +1,14 @@
+.featuresFeature {
+  padding: var(--space-9);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.featuresFeatureTitle {
+  margin-bottom: var(--space-4);
+  font-weight: 600;
+}
+
+.featuresFeatureDescription {
+  font-size: var(--size-sm);
+}

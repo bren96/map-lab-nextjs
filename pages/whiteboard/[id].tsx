@@ -3,6 +3,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Badge } from "../../components/Badge";
 import {
   DocumentHeader,
   DocumentHeaderSkeleton,
@@ -70,6 +71,7 @@ export default function WhiteboardDocumentView({
       >
         <Whiteboard />
       </DocumentLayout>
+      <Badge />
     </RoomProvider>
   );
 }

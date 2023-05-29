@@ -3,7 +3,6 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { Badge } from "../components/Badge";
 import "../styles/globals.css";
 
 export default function App({
@@ -19,7 +18,6 @@ export default function App({
       <TooltipProvider>
         <SessionProvider session={pageProps.session}>
           <Component {...pageProps} />
-          <Badge />
         </SessionProvider>
       </TooltipProvider>
     </>

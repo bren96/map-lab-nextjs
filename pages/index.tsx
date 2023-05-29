@@ -1,109 +1,82 @@
-import clsx from "clsx";
 import { GetServerSideProps } from "next";
-import { ComponentProps, ReactNode } from "react";
+import { signIn } from "next-auth/react";
+import { Feature } from "../components/Marketing";
 import { SignInIcon } from "../icons";
 import { MarketingLayout } from "../layouts/Marketing";
-import { signIn } from "next-auth/react";
 import * as Server from "../lib/server";
 import { Button, LinkButton } from "../primitives/Button";
 import { Container } from "../primitives/Container";
 import styles from "./index.module.css";
-
-interface FeatureProps extends Omit<ComponentProps<"div">, "title"> {
-  description: ReactNode;
-  title: ReactNode;
-}
-
-function Feature({ title, description, className, ...props }: FeatureProps) {
-  return (
-    <div className={clsx(className, styles.featuresFeature)} {...props}>
-      <h4 className={styles.featuresFeatureTitle}>{title}</h4>
-      <p className={styles.featuresFeatureDescription}>{description}</p>
-    </div>
-  );
-}
 
 export default function Index() {
   return (
     <MarketingLayout>
       <Container className={styles.section}>
         <div className={styles.heroInfo}>
-          <h1 className={styles.heroTitle}>
-            Kickstart your collaborative&nbsp;app
-          </h1>
+          <h1 className={styles.heroTitle}>Make maps with your team</h1>
           <p className={styles.heroLead}>
-            Use the Liveblocks Starter Kit to build your document-based
-            collaborative app in&nbsp;minutes.
+            MAP-LAB is a real-time collaborative web mapping application,
+            empowering teams to use maps and geospatial data to solve complex
+            problems.
           </p>
         </div>
         <div className={styles.heroActions}>
           <Button icon={<SignInIcon />} onClick={() => signIn()}>
             Sign in
           </Button>
-          <LinkButton
-            href="https://liveblocks.io/docs/guides/nextjs-starter-kit"
-            target="_blank"
-            variant="secondary"
-          >
+          <LinkButton href="/#features" variant="secondary">
             Learn more
           </LinkButton>
         </div>
       </Container>
       <Container className={styles.section}>
-        <h2 className={styles.sectionTitle}>Features</h2>
+        <h2 id="features" className={styles.sectionTitle}>
+          Features
+        </h2>
         <div className={styles.featuresGrid}>
           <Feature
+            title="Collaborative"
             description={
               <>
-                A collaborative whiteboard app with included share menu,
-                documents listing, users, groups, permissions, and more.
+                A collaborative-first web mapping application. Build, edit, and
+                share maps with others in real-time.
               </>
             }
-            title="Liveblocks"
           />
           <Feature
+            title="Geospatial IDE"
             description={
               <>
-                Best practices followed, using a mixture of SSR and custom API
-                endpoints. Modify documents from both client and server.
+                Access a wide variety of advanced geospatial and statistical
+                tools from GeoPandas and TurfJS.
               </>
             }
-            title="Next.js"
           />
           <Feature
+            title="Powerful map editor"
             description={
               <>
-                Adjust our reusable interface & design system to fit your needs.
+                Style, draw, and annotate your maps. Design data-driven and
+                interactive visualizations.
               </>
             }
-            title="User Interface"
           />
           <Feature
-            description={
-              <>
-                All custom client and server functions are fully typed, and easy
-                to update.
-              </>
-            }
-            title="TypeScript"
+            title="Built for the web"
+            description={<>No installation, no headaches.</>}
           />
           <Feature
-            description={
-              <>
-                Complete authentication, compatible with any NextAuth provider,
-                including GitHub, Google, Auth0, and many more.
-              </>
-            }
-            title="NextAuth.js"
+            title="Developer friendly"
+            description={<>Open Source. View the project on GitHub.</>}
           />
           <Feature
+            title="Transparent pricing"
             description={
               <>
-                See data update live using the SWR (state-while-revalidate)
-                library.
+                $30 per month per user.{" "}
+                <a href="mailto:brendan@map-lab.app">Contact Us</a>.
               </>
             }
-            title="SWR"
           />
         </div>
       </Container>
