@@ -54,6 +54,8 @@ export type Presence = {
 export type Note = LiveObject<{
   x: number;
   y: number;
+  fillColor: string;
+  strokeColor: string;
   text: string;
   selectedBy: UserMeta["info"] | null;
   id: string;

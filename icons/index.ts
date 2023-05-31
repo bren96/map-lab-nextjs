@@ -1,4 +1,6 @@
 export * from "./Check";
+export * from "./ColorFill";
+export * from "./ColorStroke";
 export * from "./SignIn";
 export * from "./SignOut";
 export * from "./Select";

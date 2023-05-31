@@ -1,7 +1,8 @@
-import clsx from "clsx";
 import { LiveObject, shallow } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
+import clsx from "clsx";
 import { nanoid } from "nanoid";
+import { useSession } from "next-auth/react";
 import {
   ChangeEvent,
   ComponentProps,
@@ -10,8 +11,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { PlusIcon, RedoIcon, UndoIcon } from "../../icons";
-import { useSession } from "next-auth/react";
+import { HexColorPicker } from "react-colorful";
+import {
+  ColorFillIcon,
+  ColorStrokeIcon,
+  PlusIcon,
+  RedoIcon,
+  UndoIcon,
+} from "../../icons";
 import {
   UserMeta,
   useCanRedo,
@@ -26,8 +33,8 @@ import { Spinner } from "../../primitives/Spinner";
 import { Tooltip } from "../../primitives/Tooltip";
 import { useBoundingClientRectRef } from "../../utils";
 import { Cursors } from "../Cursors";
-import { WhiteboardNote } from "./WhiteboardNote";
 import styles from "./Whiteboard.module.css";
+import { WhiteboardNote } from "./WhiteboardNote";
 
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
@@ -67,6 +74,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
 
+  let focusedNoteId: string | null;
+
   const canvasRef = useRef(null);
   const rectRef = useBoundingClientRectRef(canvasRef);
 
@@ -90,6 +99,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     const note = new LiveObject({
       x: getRandomInt(300),
       y: getRandomInt(300),
+      fillColor: "black",
+      strokeColor: "black",
       text: "",
       selectedBy: null,
       id: noteId,
@@ -172,14 +183,28 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     handleNoteUpdate(noteId, { text: e.target.value, selectedBy: currentUser });
   }
 
+  function handleNoteFillColorChange(color: string, noteId: string | null) {
+    if (noteId) {
+      handleNoteUpdate(noteId, { fillColor: color });
+    }
+  }
+
+  function handleNoteStrokeColorChange(color: string, noteId: string | null) {
+    if (noteId) {
+      handleNoteUpdate(noteId, { strokeColor: color });
+    }
+  }
+
   // When note is focused, update the selected user LiveObject
-  function handleNoteFocus(e: FocusEvent<HTMLTextAreaElement>, noteId: string) {
+  function handleNoteFocus(e: FocusEvent<HTMLDivElement>, noteId: string) {
     history.pause();
+    focusedNoteId = noteId;
     handleNoteUpdate(noteId, { selectedBy: currentUser });
   }
 
   // When note is unfocused, remove the selected user on the LiveObject
   function handleNoteBlur(e: FocusEvent<HTMLTextAreaElement>, noteId: string) {
+    // focusedNoteId = null;
     handleNoteUpdate(noteId, { selectedBy: null });
     history.resume();
   }
@@ -233,6 +258,24 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               variant="subtle"
             />
           </Tooltip>
+          <Tooltip content="Fill Color" sideOffset={16}>
+            <Button icon={<ColorFillIcon />} variant="subtle" />
+          </Tooltip>
+
+          <HexColorPicker
+            onChange={(color) =>
+              handleNoteFillColorChange(color, focusedNoteId)
+            }
+          />
+
+          <Tooltip content="Stroke Color" sideOffset={16}>
+            <Button icon={<ColorStrokeIcon />} variant="subtle" />
+          </Tooltip>
+          <HexColorPicker
+            onChange={(color) =>
+              handleNoteStrokeColorChange(color, focusedNoteId)
+            }
+          />
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@
   max-width: 400px;
   min-height: 100px;
   transition: transform var(--transition-linear);
+  border: 1px solid black;
 }
 
 .note {

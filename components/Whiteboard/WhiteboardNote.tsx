@@ -25,7 +25,7 @@ interface Props
   onBlur: FocusEventHandler<HTMLTextAreaElement>;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onDelete: () => void;
-  onFocus: FocusEventHandler<HTMLTextAreaElement>;
+  onFocus: FocusEventHandler<HTMLDivElement>;
   onPointerDown: PointerEventHandler<HTMLDivElement>;
 }
 
@@ -75,11 +75,13 @@ export const WhiteboardNote = memo(
           transition: dragged ? "none" : undefined,
           zIndex: dragged ? 1 : 0,
           cursor: dragged ? "grabbing" : "grab",
+          backgroundColor: note.fillColor,
+          borderColor: note.strokeColor,
           ...style,
         }}
         {...props}
       >
-        <div className={styles.note}>
+        <div className={styles.note} onFocus={onFocus}>
           <div className={styles.header}>
             <Button
               className={styles.deleteButton}
@@ -104,7 +106,6 @@ export const WhiteboardNote = memo(
               className={styles.textArea}
               onBlur={onBlur}
               onChange={onChange}
-              onFocus={onFocus}
               onKeyDown={handleKeyDown}
               onPointerDown={(e) => e.stopPropagation()}
               placeholder="Write note…"
