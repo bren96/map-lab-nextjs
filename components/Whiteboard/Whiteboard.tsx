@@ -1,7 +1,8 @@
-import clsx from "clsx";
 import { LiveObject, shallow } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
+import clsx from "clsx";
 import { nanoid } from "nanoid";
+import { useSession } from "next-auth/react";
 import {
   ChangeEvent,
   ComponentProps,
@@ -10,8 +11,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { PlusIcon, RedoIcon, UndoIcon } from "../../icons";
-import { useSession } from "next-auth/react";
+import { HexColorPicker } from "react-colorful";
+import { ColorFillIcon, ColorStrokeIcon, PlusIcon, RedoIcon, UndoIcon } from "../../icons";
 import {
   UserMeta,
   useCanRedo,
@@ -22,12 +23,13 @@ import {
   useStorage,
 } from "../../liveblocks.config";
 import { Button } from "../../primitives/Button";
+import { Popover } from "../../primitives/Popover";
 import { Spinner } from "../../primitives/Spinner";
 import { Tooltip } from "../../primitives/Tooltip";
 import { useBoundingClientRectRef } from "../../utils";
 import { Cursors } from "../Cursors";
-import { WhiteboardNote } from "./WhiteboardNote";
 import styles from "./Whiteboard.module.css";
+import { WhiteboardNote } from "./WhiteboardNote";
 
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
@@ -184,6 +186,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     history.resume();
   }
 
+  const [fillColor, setFillColor] = useState('#D9D9D9');
+  const [strokeColor, setStrokeColor] = useState('#D9D9D9');
+
   return (
     <div
       className={clsx(className, styles.canvas)}
@@ -233,6 +238,36 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               variant="subtle"
             />
           </Tooltip>
+          <Popover
+            align="center"
+            content={<HexColorPicker color={fillColor} onChange={setFillColor} />}
+            side="top"
+            sideOffset={24}
+          >
+            <div>
+              <Tooltip content="Fill" sideOffset={16}>
+                <Button
+                  icon={<ColorFillIcon fill={fillColor} />}
+                  variant="subtle"
+                />
+              </Tooltip>
+            </div>
+          </Popover>
+          <Popover
+            align="center"
+            content={<HexColorPicker color={strokeColor} onChange={setStrokeColor} />}
+            side="top"
+            sideOffset={24}
+          >
+            <div>
+              <Tooltip content="Stroke" sideOffset={16}>
+                <Button
+                  icon={<ColorStrokeIcon stroke={strokeColor} />}
+                  variant="subtle"
+                />
+              </Tooltip>
+            </div>
+          </Popover>
         </div>
       )}
     </div>
