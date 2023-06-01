@@ -3,6 +3,7 @@ import {
   ChangeEventHandler,
   ComponentProps,
   KeyboardEvent,
+  PointerEvent,
   PointerEventHandler,
   memo,
   useCallback,
@@ -17,13 +18,14 @@ import styles from "./WhiteboardNote.module.css";
 interface Props
   extends Omit<
     ComponentProps<"div">,
-    "id" | "onBlur" | "onChange" | "onFocus"
+    "id" | "onBlur" | "onChange" | "onFocus" | "onPointerDown"
   > {
   dragged: boolean;
   id: string;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onDelete: () => void;
   onPointerDown: PointerEventHandler<HTMLDivElement>;
+  onSelect: () => void;
 }
 
 export const WhiteboardNote = memo(
@@ -33,6 +35,7 @@ export const WhiteboardNote = memo(
     onPointerDown,
     onDelete,
     onChange,
+    onSelect,
     style,
     className,
     ...props
@@ -53,6 +56,14 @@ export const WhiteboardNote = memo(
       []
     );
 
+    const handlePointerDown = useCallback(
+      (event: PointerEvent<HTMLDivElement>) => {
+        onPointerDown(event);
+        onSelect();
+      },
+      []
+    );
+
     if (!note) {
       return null;
     }
@@ -64,7 +75,7 @@ export const WhiteboardNote = memo(
         className={clsx(className, styles.container)}
         data-note={id}
         onDoubleClick={handleDoubleClick}
-        onPointerDown={onPointerDown}
+        onPointerDown={handlePointerDown}
         style={{
           transform: `translate(${x}px, ${y}px)`,
           transition: dragged ? "none" : undefined,
