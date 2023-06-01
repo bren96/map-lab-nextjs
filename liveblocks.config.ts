@@ -57,6 +57,8 @@ export type Note = LiveObject<{
   text: string;
   selectedBy: UserMeta["info"] | null;
   id: string;
+  fillColor: string;
+  strokeColor: string;
 }>;
 
 export type Notes = LiveMap<string, Note>;

@@ -2,7 +2,6 @@ import clsx from "clsx";
 import {
   ChangeEventHandler,
   ComponentProps,
-  FocusEventHandler,
   KeyboardEvent,
   PointerEventHandler,
   memo,
@@ -22,10 +21,8 @@ interface Props
   > {
   dragged: boolean;
   id: string;
-  onBlur: FocusEventHandler<HTMLTextAreaElement>;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onDelete: () => void;
-  onFocus: FocusEventHandler<HTMLTextAreaElement>;
   onPointerDown: PointerEventHandler<HTMLDivElement>;
 }
 
@@ -36,8 +33,6 @@ export const WhiteboardNote = memo(
     onPointerDown,
     onDelete,
     onChange,
-    onFocus,
-    onBlur,
     style,
     className,
     ...props
@@ -62,7 +57,7 @@ export const WhiteboardNote = memo(
       return null;
     }
 
-    const { x, y, text, selectedBy } = note;
+    const { x, y, text, selectedBy, fillColor, strokeColor } = note;
 
     return (
       <div
@@ -79,7 +74,14 @@ export const WhiteboardNote = memo(
         }}
         {...props}
       >
-        <div className={styles.note}>
+        <div
+          className={styles.note}
+          style={{
+            backgroundColor: fillColor,
+            borderColor: strokeColor,
+            ...style,
+          }}
+        >
           <div className={styles.header}>
             <Button
               className={styles.deleteButton}
@@ -102,11 +104,8 @@ export const WhiteboardNote = memo(
             <div className={styles.textAreaSize}>{text + " "}</div>
             <textarea
               className={styles.textArea}
-              onBlur={onBlur}
               onChange={onChange}
-              onFocus={onFocus}
               onKeyDown={handleKeyDown}
-              onPointerDown={(e) => e.stopPropagation()}
               placeholder="Write note…"
               ref={textAreaRef}
               value={text}

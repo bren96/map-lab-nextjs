@@ -6,13 +6,19 @@ import { useSession } from "next-auth/react";
 import {
   ChangeEvent,
   ComponentProps,
-  FocusEvent,
   PointerEvent,
+  useEffect,
   useRef,
   useState,
 } from "react";
 import { HexColorPicker } from "react-colorful";
-import { ColorFillIcon, ColorStrokeIcon, PlusIcon, RedoIcon, UndoIcon } from "../../icons";
+import {
+  ColorFillIcon,
+  ColorStrokeIcon,
+  PlusIcon,
+  RedoIcon,
+  UndoIcon,
+} from "../../icons";
 import {
   UserMeta,
   useCanRedo,
@@ -34,12 +40,6 @@ import { WhiteboardNote } from "./WhiteboardNote";
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
 }
-
-/**
- * This file shows how to create a multiplayer canvas with draggable notes.
- * The notes allow you to add text, display who's currently editing them, and can be removed.
- * There's also a toolbar allowing you to undo/redo your actions and add more notes.
- */
 
 export function Whiteboard() {
   const { data: session } = useSession();
@@ -65,6 +65,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     shallow
   );
 
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
@@ -73,6 +75,46 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
   const rectRef = useBoundingClientRectRef(canvasRef);
 
   const isReadOnly = useSelf((me) => me.isReadOnly);
+
+  const [fillColor, setFillColor] = useState("#D9D9D9");
+  useEffect(() => {
+    handleNoteUpdate(selectedNoteId, { fillColor: fillColor });
+  }, [fillColor]);
+
+  const [strokeColor, setStrokeColor] = useState("#D9D9D9");
+  useEffect(() => {
+    handleNoteUpdate(selectedNoteId, { strokeColor: strokeColor });
+  }, [strokeColor]);
+
+  const selectedFillColor: string | null = useStorage((root) => {
+    const selectedNoteKey = Array.from(root.notes.keys()).find((noteKey) => {
+      return root.notes.get(noteKey)?.id === selectedNoteId;
+    });
+    return selectedNoteKey
+      ? root.notes.get(selectedNoteKey)?.fillColor ?? null
+      : null;
+  }, shallow);
+
+  const selectedStrokeColor: string | null = useStorage((root) => {
+    const selectedNoteKey = Array.from(root.notes.keys()).find((noteKey) => {
+      return root.notes.get(noteKey)?.id === selectedNoteId;
+    });
+    return selectedNoteKey
+      ? root.notes.get(selectedNoteKey)?.strokeColor ?? null
+      : null;
+  }, shallow);
+
+  useEffect(() => {
+    if (selectedFillColor) {
+      setFillColor(selectedFillColor);
+    }
+  }, [selectedNoteId]);
+
+  useEffect(() => {
+    if (selectedStrokeColor) {
+      setStrokeColor(selectedStrokeColor);
+    }
+  });
 
   // Info about element being dragged
   const [isDragging, setIsDragging] = useState(false);
@@ -95,8 +137,18 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       text: "",
       selectedBy: null,
       id: noteId,
+      fillColor: fillColor,
+      strokeColor: strokeColor,
     });
     storage.get("notes").set(noteId, note);
+  }, []);
+
+  const clearUsersSelectedNote = useMutation(({ storage, self }) => {
+    storage.get("notes").forEach((note) => {
+      if (note.get("selectedBy")?.name === currentUser?.name) {
+        note.set("selectedBy", null);
+      }
+    });
   }, []);
 
   // Delete a note
@@ -127,6 +179,11 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
   ) {
     history.pause();
     e.stopPropagation();
+
+    clearUsersSelectedNote();
+    setSelectedNoteId(noteId);
+    handleNoteUpdate(noteId, { selectedBy: currentUser });
+
     const element = document.querySelector(`[data-note="${noteId}"]`);
     if (!element) {
       return;
@@ -152,6 +209,10 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     history.resume();
   }
 
+  function handleCanvasPointerDown(e: PointerEvent<HTMLDivElement>) {
+    clearUsersSelectedNote();
+  }
+
   // If dragging on canvas pointer move, move element and adjust for offset
   function handleCanvasPointerMove(e: PointerEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -174,26 +235,12 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     handleNoteUpdate(noteId, { text: e.target.value, selectedBy: currentUser });
   }
 
-  // When note is focused, update the selected user LiveObject
-  function handleNoteFocus(e: FocusEvent<HTMLTextAreaElement>, noteId: string) {
-    history.pause();
-    handleNoteUpdate(noteId, { selectedBy: currentUser });
-  }
-
-  // When note is unfocused, remove the selected user on the LiveObject
-  function handleNoteBlur(e: FocusEvent<HTMLTextAreaElement>, noteId: string) {
-    handleNoteUpdate(noteId, { selectedBy: null });
-    history.resume();
-  }
-
-  const [fillColor, setFillColor] = useState('#D9D9D9');
-  const [strokeColor, setStrokeColor] = useState('#D9D9D9');
-
   return (
     <div
       className={clsx(className, styles.canvas)}
       onPointerMove={handleCanvasPointerMove}
       onPointerUp={handleCanvasPointerUp}
+      onPointerDown={handleCanvasPointerDown}
       ref={canvasRef}
       style={{ pointerEvents: isReadOnly ? "none" : undefined, ...style }}
       {...props}
@@ -208,10 +255,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             dragged={id === dragInfo?.current?.noteId}
             id={id}
             key={id}
-            onBlur={(e) => handleNoteBlur(e, id)}
             onChange={(e) => handleNoteChange(e, id)}
             onDelete={() => handleNoteDelete(id)}
-            onFocus={(e) => handleNoteFocus(e, id)}
             onPointerDown={(e) => handleNotePointerDown(e, id)}
           />
         ))
@@ -240,7 +285,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           </Tooltip>
           <Popover
             align="center"
-            content={<HexColorPicker color={fillColor} onChange={setFillColor} />}
+            content={
+              <HexColorPicker color={fillColor} onChange={setFillColor} />
+            }
             side="top"
             sideOffset={24}
           >
@@ -255,7 +302,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           </Popover>
           <Popover
             align="center"
-            content={<HexColorPicker color={strokeColor} onChange={setStrokeColor} />}
+            content={
+              <HexColorPicker color={strokeColor} onChange={setStrokeColor} />
+            }
             side="top"
             sideOffset={24}
           >
