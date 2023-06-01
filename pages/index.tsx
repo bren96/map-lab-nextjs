@@ -15,9 +15,8 @@ export default function Index() {
         <div className={styles.heroInfo}>
           <h1 className={styles.heroTitle}>Make maps with your team</h1>
           <p className={styles.heroLead}>
-            MAP-LAB is a collaborative web mapping application,
-            empowering teams to use maps and geospatial data to solve complex
-            problems.
+            MAP-LAB is a collaborative web mapping application, empowering teams
+            to use maps and geospatial data to solve complex problems.
           </p>
         </div>
         <div className={styles.heroActions}>
@@ -71,14 +70,7 @@ export default function Index() {
           />
           <Feature
             title="Transparent pricing"
-            description={
-              <>
-                <p>
-                  $50 per month per user.
-                </p>
-                <a href="mailto:brendan@map-lab.app"> Contact Us</a>.
-              </>
-            }
+            description={<>$100 per month per user. Simple.</>}
           />
         </div>
       </Container>
