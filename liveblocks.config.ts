@@ -51,7 +51,7 @@ export type Presence = {
   cursor: { x: number; y: number } | null;
 };
 
-export type Note = LiveObject<{
+export type Note = {
   x: number;
   y: number;
   text: string;
@@ -59,16 +59,21 @@ export type Note = LiveObject<{
   id: string;
   fillColor: string;
   strokeColor: string;
-}>;
+};
 
-export type Notes = LiveMap<string, Note>;
+export type LiveNote = LiveObject<Note>;
+export type LiveNotes = LiveMap<string, LiveNote>;
 
 // Optionally, Storage represents the shared document that persists in the
 // Room, even after all Users leave. Fields under Storage typically are
 // LiveList, LiveMap, LiveObject instances, for which updates are
 // automatically persisted and synced to all connected clients.
-type Storage = {
-  notes: Notes;
+export type Storage = {
+  notes: LiveNotes;
+};
+
+export type ReadonlyStorage = {
+  notes: ReadonlyMap<string, Note>;
 };
 
 export type UserInfo = Pick<User, "name" | "avatar" | "color">;
