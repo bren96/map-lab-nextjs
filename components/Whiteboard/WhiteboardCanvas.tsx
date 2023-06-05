@@ -38,6 +38,7 @@ import { useBoundingClientRectRef } from "../../utils";
 import { getRandomInt } from "../../utils/random";
 import { Cursors } from "../Cursors";
 import styles from "./WhiteboardCanvas.module.css";
+import { WhiteBoardMap } from "./WhiteboardMap";
 import { WhiteboardNote } from "./WhiteboardNote";
 
 interface Props extends ComponentProps<"div"> {
@@ -276,6 +277,7 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
       style={{ pointerEvents: isReadOnly ? "none" : undefined, ...style }}
       {...props}
     >
+      <WhiteBoardMap />
       <Cursors element={canvasRef} />
       {noteIds.map((id: string) => (
         <WhiteboardNote

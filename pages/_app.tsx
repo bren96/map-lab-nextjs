@@ -14,6 +14,10 @@ export default function App({
       <Head>
         <title>MAP-LAB</title>
         <link href="/favicon.svg" rel="icon" type="image/svg" />
+        <link
+          href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css"
+          rel="stylesheet"
+        />
       </Head>
       <TooltipProvider>
         <SessionProvider session={pageProps.session}>
