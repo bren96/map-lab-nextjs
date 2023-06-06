@@ -20,8 +20,8 @@ interface Props
     ComponentProps<"div">,
     "id" | "onBlur" | "onChange" | "onFocus" | "onPointerDown"
   > {
-  dragged: boolean;
   id: string;
+  dragged: boolean;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onDelete: () => void;
   onPointerDown: PointerEventHandler<HTMLDivElement>;
@@ -32,12 +32,12 @@ export const WhiteboardNote = memo(
   ({
     id,
     dragged,
+    style,
+    className,
     onPointerDown,
     onDelete,
     onChange,
     onSelect,
-    style,
-    className,
     ...props
   }: Props) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -68,8 +68,6 @@ export const WhiteboardNote = memo(
       return null;
     }
 
-    const { x, y, text, selectedBy, fillColor, strokeColor } = note;
-
     return (
       <div
         className={clsx(className, styles.container)}
@@ -77,7 +75,7 @@ export const WhiteboardNote = memo(
         onDoubleClick={handleDoubleClick}
         onPointerDown={handlePointerDown}
         style={{
-          transform: `translate(${x}px, ${y}px)`,
+          transform: `translate(${note.x}px, ${note.y}px)`,
           transition: dragged ? "none" : undefined,
           zIndex: dragged ? 1 : 0,
           cursor: dragged ? "grabbing" : "grab",
@@ -88,8 +86,8 @@ export const WhiteboardNote = memo(
         <div
           className={styles.note}
           style={{
-            backgroundColor: fillColor,
-            borderColor: strokeColor,
+            backgroundColor: note.fillColor,
+            borderColor: note.strokeColor,
             ...style,
           }}
         >
@@ -101,25 +99,25 @@ export const WhiteboardNote = memo(
               variant="subtle"
             />
             <div className={styles.presence}>
-              {selectedBy ? (
+              {note.selectedBy ? (
                 <Avatar
-                  color={selectedBy.color}
-                  name={selectedBy.name}
+                  color={note.selectedBy.color}
+                  name={note.selectedBy.name}
                   outline
-                  src={selectedBy.avatar}
+                  src={note.selectedBy.avatar}
                 />
               ) : null}
             </div>
           </div>
           <div className={styles.content}>
-            <div className={styles.textAreaSize}>{text + " "}</div>
+            <div className={styles.textAreaSize}>{note.text + " "}</div>
             <textarea
               className={styles.textArea}
               onChange={onChange}
               onKeyDown={handleKeyDown}
               placeholder="Write note…"
               ref={textAreaRef}
-              value={text}
+              value={note.text}
             />
           </div>
         </div>
