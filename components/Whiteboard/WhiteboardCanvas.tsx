@@ -8,7 +8,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { HexColorPicker } from "react-colorful";
 import {
   ColorFillIcon,
   ColorStrokeIcon,
@@ -32,6 +31,7 @@ import {
   useStorage,
 } from "../../liveblocks.config";
 import { Button } from "../../primitives/Button";
+import { ColorPicker } from "../../primitives/ColorPicker";
 import { Popover } from "../../primitives/Popover";
 import { Tooltip } from "../../primitives/Tooltip";
 import { useBoundingClientRectRef } from "../../utils";
@@ -274,6 +274,22 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
     handleUpdateNote(selectedNoteId, { strokeColor: color });
   }
 
+  function handleFillColorInputOnChange(
+    e: ChangeEvent<HTMLInputElement> | undefined
+  ) {
+    if (e?.target.value) {
+      handleUpdateNote(selectedNoteId, { strokeColor: e.target.value });
+    }
+  }
+
+  function handleStrokeColorInputOnChange(
+    e: ChangeEvent<HTMLInputElement> | undefined
+  ) {
+    if (e?.target.value) {
+      handleUpdateNote(selectedNoteId, { strokeColor: e.target.value });
+    }
+  }
+
   return (
     <div
       ref={canvasRef}
@@ -331,9 +347,10 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
             disabled={!selectedNoteFillColor}
             onOpenChange={handleFillColorOpenChange}
             content={
-              <HexColorPicker
+              <ColorPicker
                 color={selectedNoteFillColor}
-                onChange={handleFillColorPickerOnChange}
+                onPickerChange={handleFillColorPickerOnChange}
+                onInputChange={handleFillColorInputOnChange}
               />
             }
           >
@@ -356,12 +373,11 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
             disabled={!selectedNoteStrokeColor}
             onOpenChange={handleStrokeColorOpenChange}
             content={
-              selectedNoteFillColor && (
-                <HexColorPicker
-                  color={selectedNoteStrokeColor}
-                  onChange={handleStrokeColorPickerOnChange}
-                />
-              )
+              <ColorPicker
+                color={selectedNoteStrokeColor}
+                onPickerChange={handleStrokeColorPickerOnChange}
+                onInputChange={handleStrokeColorInputOnChange}
+              />
             }
           >
             <div>
