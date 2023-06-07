@@ -15,6 +15,8 @@ export function WhiteboardMap({ ...props }: Props) {
       style: "https://demotiles.maplibre.org/style.json",
       center: [0, 0],
       zoom: 1,
+      hash: true,
+      maplibreLogo: true,
     });
   }, []);
 
