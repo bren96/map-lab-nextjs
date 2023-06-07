@@ -56,13 +56,10 @@ export const WhiteboardNote = memo(
       []
     );
 
-    const handlePointerDown = useCallback(
-      (event: PointerEvent<HTMLDivElement>) => {
-        onPointerDown(event);
-        onSelect();
-      },
-      []
-    );
+    function handlePointerDown(e: PointerEvent<HTMLDivElement>) {
+      onPointerDown(e);
+      onSelect();
+    }
 
     if (!note) {
       return null;

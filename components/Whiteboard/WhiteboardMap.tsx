@@ -1,7 +1,7 @@
 import { Map } from "maplibre-gl";
 import { ComponentProps, useEffect, useRef } from "react";
 
-interface Props extends ComponentProps<"div"> {}
+type Props = ComponentProps<"div">;
 
 export function WhiteboardMap({ ...props }: Props) {
   const mapContainer = useRef<HTMLDivElement | null>(null);
