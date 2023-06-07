@@ -83,8 +83,8 @@ export function addNote(
     y: getRandomInt(300),
     text: "",
     selectedBy: null,
-    fillColor: "",
-    strokeColor: "",
+    fillColor: "#ffffff",
+    strokeColor: "#000",
   });
 
   storage.get("notes").set(note.get("id"), note);
@@ -326,42 +326,54 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
           </Tooltip>
           <Popover
             align="center"
+            side="top"
+            sideOffset={24}
+            disabled={!selectedNoteFillColor}
+            onOpenChange={handleFillColorOpenChange}
             content={
               <HexColorPicker
                 color={selectedNoteFillColor}
                 onChange={handleFillColorPickerOnChange}
               />
             }
-            side="top"
-            sideOffset={24}
-            onOpenChange={handleFillColorOpenChange}
           >
             <div>
               <Tooltip content="Fill" sideOffset={16}>
                 <Button
-                  icon={<ColorFillIcon fill={selectedNoteFillColor} />}
                   variant="subtle"
+                  disabled={!selectedNoteFillColor}
+                  icon={
+                    <ColorFillIcon fill={selectedNoteFillColor ?? "#444"} />
+                  }
                 />
               </Tooltip>
             </div>
           </Popover>
           <Popover
             align="center"
-            content={
-              <HexColorPicker
-                color={selectedNoteStrokeColor}
-                onChange={handleStrokeColorPickerOnChange}
-              />
-            }
             side="top"
             sideOffset={24}
+            disabled={!selectedNoteStrokeColor}
             onOpenChange={handleStrokeColorOpenChange}
+            content={
+              selectedNoteFillColor && (
+                <HexColorPicker
+                  color={selectedNoteStrokeColor}
+                  onChange={handleStrokeColorPickerOnChange}
+                />
+              )
+            }
           >
             <div>
               <Tooltip content="Stroke" sideOffset={16}>
                 <Button
-                  icon={<ColorStrokeIcon stroke={selectedNoteStrokeColor} />}
                   variant="subtle"
+                  disabled={!selectedNoteStrokeColor}
+                  icon={
+                    <ColorStrokeIcon
+                      stroke={selectedNoteStrokeColor ?? "#444"}
+                    />
+                  }
                 />
               </Tooltip>
             </div>

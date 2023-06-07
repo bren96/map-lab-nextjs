@@ -10,6 +10,7 @@ interface Props
     > {
   content: ReactNode;
   aboveOverlay?: boolean;
+  disabled: boolean;
 }
 
 export function Popover({
@@ -20,6 +21,7 @@ export function Popover({
   align,
   alignOffset,
   aboveOverlay,
+  disabled,
   ...props
 }: Props) {
   return (
@@ -35,6 +37,7 @@ export function Popover({
           alignOffset={alignOffset}
           style={
             {
+              display: disabled ? "none" : undefined,
               zIndex: aboveOverlay ? "var(--z-overlay)" : undefined,
             } as CSSProperties
           }
