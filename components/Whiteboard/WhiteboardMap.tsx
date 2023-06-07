@@ -1,7 +1,9 @@
 import { Map } from "maplibre-gl";
-import { useEffect, useRef } from "react";
+import { ComponentProps, useEffect, useRef } from "react";
 
-export function WhiteBoardMap() {
+interface Props extends ComponentProps<"div"> {}
+
+export function WhiteboardMap({ ...props }: Props) {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<Map | null>(null);
 
@@ -24,6 +26,8 @@ export function WhiteBoardMap() {
         height: "100%",
         width: "100%",
       }}
+      onPointerDown={props.onPointerDown}
+      onPointerUp={props.onPointerUp}
     />
   );
 }
