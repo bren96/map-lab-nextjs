@@ -9,10 +9,10 @@ import {
   useCallback,
   useRef,
 } from "react";
-import { CrossIcon } from "../../icons";
-import { useStorage } from "../../liveblocks.config";
-import { Avatar } from "../../primitives/Avatar";
-import { Button } from "../../primitives/Button";
+import { CrossIcon } from "../../../icons";
+import { useStorage } from "../../../liveblocks.config";
+import { Avatar } from "../../../primitives/Avatar";
+import { Button } from "../../../primitives/Button";
 import styles from "./WhiteboardNote.module.css";
 
 interface Props
@@ -85,6 +85,7 @@ export const WhiteboardNote = memo(
           style={{
             backgroundColor: note.fillColor,
             borderColor: note.strokeColor,
+            borderWidth: note.strokeWidth,
             ...style,
           }}
         >

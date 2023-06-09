@@ -1,8 +1,8 @@
 import { ClientSideSuspense } from "@liveblocks/react";
 import { useSession } from "next-auth/react";
 import { Spinner } from "../../primitives/Spinner";
-import { Canvas } from "./WhiteboardCanvas";
 import styles from "./Whiteboard.module.css";
+import { Canvas } from "./WhiteboardCanvas";
 
 export function Whiteboard() {
   const { data: session } = useSession();
