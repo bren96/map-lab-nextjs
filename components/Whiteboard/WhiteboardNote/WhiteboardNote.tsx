@@ -13,6 +13,7 @@ import { CrossIcon } from "../../../icons";
 import { useStorage } from "../../../liveblocks.config";
 import { Avatar } from "../../../primitives/Avatar";
 import { Button } from "../../../primitives/Button";
+import { applyOpacityToHex } from "../../../utils/colors";
 import styles from "./WhiteboardNote.module.css";
 
 interface Props
@@ -83,8 +84,12 @@ export const WhiteboardNote = memo(
         <div
           className={styles.note}
           style={{
-            backgroundColor: note.fillColor,
-            borderColor: note.strokeColor,
+            backgroundColor:
+              applyOpacityToHex(note.fillColor, note.fillOpacity) ??
+              note.fillColor,
+            borderColor:
+              applyOpacityToHex(note.strokeColor, note.strokeOpacity) ??
+              note.strokeColor,
             borderWidth: note.strokeWidth,
             ...style,
           }}

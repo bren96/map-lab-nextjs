@@ -6,7 +6,9 @@ import {
   useMutation,
   useStorage,
 } from "../../../liveblocks.config";
+import { Slider } from "../../../primitives/BasicSlider";
 import { ColorPicker } from "../../../primitives/ColorPicker";
+import styles from "./WhiteboardFillControls.module.css";
 
 interface Props {
   noteId: string | undefined;
@@ -15,6 +17,11 @@ interface Props {
 export function WhiteboardFillControls({ noteId }: Props) {
   const selectedNoteFillColor: string | undefined = useStorage(
     (root: ReadonlyStorage) => getNote(root, noteId)?.fillColor,
+    shallow
+  );
+
+  const selectedNoteFillOpacity: number | undefined = useStorage(
+    (root: ReadonlyStorage) => getNote(root, noteId)?.fillOpacity,
     shallow
   );
 
@@ -32,15 +39,32 @@ export function WhiteboardFillControls({ noteId }: Props) {
     e: ChangeEvent<HTMLInputElement> | undefined
   ) {
     if (e?.target.value) {
-      handleUpdateNote(noteId, { strokeColor: e.target.value });
+      handleUpdateNote(noteId, { fillColor: e.target.value });
     }
   }
 
+  function handleSliderOnValueChange(value: number[]) {
+    handleUpdateNote(noteId, { fillOpacity: value[0] });
+  }
+
   return (
-    <ColorPicker
-      color={selectedNoteFillColor}
-      onPickerChange={handleFillColorPickerOnChange}
-      onInputChange={handleFillColorInputOnChange}
-    />
+    <>
+      <ColorPicker
+        color={selectedNoteFillColor}
+        onPickerChange={handleFillColorPickerOnChange}
+        onInputChange={handleFillColorInputOnChange}
+      />
+      <div className={styles.container}>
+        <span className={styles.label}>Opacity</span>
+        <Slider
+          step={0.1}
+          min={0}
+          max={1}
+          value={[selectedNoteFillOpacity ?? 1]}
+          onValueChange={handleSliderOnValueChange}
+          aria-label="Fill Opacity"
+        />
+      </div>
+    </>
   );
 }

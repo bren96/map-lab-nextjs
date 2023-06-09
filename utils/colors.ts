@@ -35,7 +35,7 @@ function standardizeColor(str: string): string {
   return ctx.fillStyle;
 }
 
-function hexToRgb(hex: string): RGB {
+export function hexToRgb(hex: string): RGB {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function (m, r, g, b) {
@@ -50,4 +50,13 @@ function hexToRgb(hex: string): RGB {
         b: parseInt(result[3], 16),
       }
     : null;
+}
+
+export function applyOpacityToHex(
+  hex: string,
+  opacity: number
+): string | undefined {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return;
+  return `rgba(${rgb.r},${rgb.g},${rgb.b}, ${opacity})`;
 }

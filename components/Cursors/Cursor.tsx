@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { ComponentProps, useMemo } from "react";
-import { getContrastingColor } from "../../utils";
 import styles from "./Cursor.module.css";
+import { getContrastingColor } from "../../utils/colors";
 
 interface Props extends Omit<ComponentProps<"div">, "color"> {
   color: string;
