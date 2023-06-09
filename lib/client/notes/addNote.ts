@@ -1,11 +1,11 @@
 import { LiveObject, User } from "@liveblocks/client";
+import { nanoid } from "nanoid";
 import {
   LiveNote,
   Presence,
   Storage,
   UserMeta,
 } from "../../../liveblocks.config";
-import { nanoid } from "nanoid";
 import { getRandomInt } from "../../../utils/random";
 
 export function addNote(
@@ -23,8 +23,10 @@ export function addNote(
     text: "",
     selectedBy: null,
     fillColor: "#ffffff",
+    fillOpacity: 1,
     strokeColor: "#000",
     strokeWidth: 3,
+    strokeOpacity: 1,
   });
 
   storage.get("notes").set(note.get("id"), note);

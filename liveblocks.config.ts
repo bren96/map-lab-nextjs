@@ -58,8 +58,10 @@ export type Note = {
   selectedBy: UserMeta["info"] | null;
   id: string;
   fillColor: string;
+  fillOpacity: number;
   strokeColor: string;
   strokeWidth: number;
+  strokeOpacity: number;
 };
 
 export type LiveNote = LiveObject<Note>;

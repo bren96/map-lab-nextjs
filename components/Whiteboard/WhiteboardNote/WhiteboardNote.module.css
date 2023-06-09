@@ -13,7 +13,7 @@
   flex-direction: column;
   padding: var(--space-5) var(--space-8) var(--space-7);
   border: 3px solid var(--color-border);
-  background: var(--color-surface-elevated);
+  background: var(--color-white);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   gap: var(--space-5);
