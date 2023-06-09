@@ -12,7 +12,7 @@ interface Props {
   noteId: string | undefined;
 }
 
-export function WhiteboardFillControls({ noteId, ...props }: Props) {
+export function WhiteboardFillControls({ noteId }: Props) {
   const selectedNoteFillColor: string | undefined = useStorage(
     (root: ReadonlyStorage) => getNote(root, noteId)?.fillColor,
     shallow

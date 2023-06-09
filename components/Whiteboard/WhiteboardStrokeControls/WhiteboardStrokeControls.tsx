@@ -14,7 +14,7 @@ interface Props {
   noteId: string | undefined;
 }
 
-export function WhiteboardStrokeControls({ noteId, ...props }: Props) {
+export function WhiteboardStrokeControls({ noteId }: Props) {
   const handleUpdateNote = useMutation(
     ({ storage, self }, noteId, updates) =>
       updateNote(storage, self, noteId, updates),
