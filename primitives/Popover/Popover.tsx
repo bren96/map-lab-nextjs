@@ -10,7 +10,7 @@ interface Props
     > {
   content: ReactNode;
   aboveOverlay?: boolean;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export function Popover({
