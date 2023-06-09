@@ -1,6 +1,5 @@
-import { LiveObject, User, shallow } from "@liveblocks/client";
+import { shallow } from "@liveblocks/client";
 import clsx from "clsx";
-import { nanoid } from "nanoid";
 import {
   ChangeEvent,
   ComponentProps,
@@ -14,13 +13,17 @@ import {
   PlusIcon,
   RedoIcon,
   UndoIcon,
-} from "../../icons";
+} from "../../../icons";
+import {
+  addNote,
+  deleteNote,
+  getNote,
+  updateNote,
+} from "../../../lib/client/notes";
 import {
   LiveNote,
   Note,
-  Presence,
   ReadonlyStorage,
-  Storage,
   UserInfo,
   UserMeta,
   useCanRedo,
@@ -29,86 +32,20 @@ import {
   useMutation,
   useSelf,
   useStorage,
-} from "../../liveblocks.config";
-import { Button } from "../../primitives/Button";
-import { ColorPicker } from "../../primitives/ColorPicker";
-import { Popover } from "../../primitives/Popover";
-import { Tooltip } from "../../primitives/Tooltip";
-import { useBoundingClientRectRef } from "../../utils";
-import { getRandomInt } from "../../utils/random";
-import { Cursors } from "../Cursors";
+} from "../../../liveblocks.config";
+import { Button } from "../../../primitives/Button";
+import { Popover } from "../../../primitives/Popover";
+import { Tooltip } from "../../../primitives/Tooltip";
+import { useBoundingClientRectRef } from "../../../utils";
+import { Cursors } from "../../Cursors";
+import { WhiteboardFillControls } from "../WhiteboardFillControls";
+import { WhiteboardMap } from "../WhiteboardMap";
+import { WhiteboardNote } from "../WhiteboardNote";
+import { WhiteboardStrokeControls } from "../WhiteboardStrokeControls";
 import styles from "./WhiteboardCanvas.module.css";
-import { WhiteboardMap } from "./WhiteboardMap";
-import { WhiteboardNote } from "./WhiteboardNote";
 
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
-}
-
-export function getNote(root: ReadonlyStorage, noteId: string): Note | null {
-  return (
-    Array.from(root.notes.values()).find((note) => {
-      return note?.id === noteId;
-    }) ?? null
-  );
-}
-
-export function updateNote(
-  storage: LiveObject<Storage>,
-  self: User<Presence, UserMeta>,
-  noteId: string,
-  updates: any
-): void {
-  if (self.isReadOnly) {
-    return;
-  }
-
-  const note = storage.get("notes").get(noteId);
-  if (note) {
-    note.update(updates);
-  }
-}
-
-export function addNote(
-  storage: LiveObject<Storage>,
-  self: User<Presence, UserMeta>
-): void {
-  if (self.isReadOnly) {
-    return;
-  }
-
-  const note: LiveNote = new LiveObject({
-    id: nanoid(),
-    x: getRandomInt(300),
-    y: getRandomInt(300),
-    text: "",
-    selectedBy: null,
-    fillColor: "#ffffff",
-    strokeColor: "#000",
-  });
-
-  storage.get("notes").set(note.get("id"), note);
-}
-
-export function deleteNote(
-  storage: LiveObject<Storage>,
-  self: User<Presence, UserMeta>,
-  noteId: string
-): void {
-  if (self.isReadOnly) {
-    return;
-  }
-  storage.get("notes").delete(noteId);
-}
-
-export function getNoteFillColor(
-  root: ReadonlyStorage,
-  selectedId: string | undefined
-): string | undefined {
-  if (selectedId) {
-    return getNote(root, selectedId)?.fillColor;
-  }
-  return undefined;
 }
 
 export function isNoteSelectedByUser(
@@ -123,16 +60,6 @@ export function isLiveNoteSelectedByUser(
   userInfo: UserInfo | null
 ): boolean {
   return liveNote.get("selectedBy") === userInfo;
-}
-
-export function getNoteStrokeColor(
-  root: ReadonlyStorage,
-  selectedId: string | undefined
-): string | undefined {
-  if (selectedId) {
-    return getNote(root, selectedId)?.strokeColor;
-  }
-  return undefined;
 }
 
 export function Canvas({ currentUser, className, style, ...props }: Props) {
@@ -157,12 +84,12 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
   }, shallow);
 
   const selectedNoteFillColor: string | undefined = useStorage(
-    (root: ReadonlyStorage) => getNoteFillColor(root, selectedNoteId),
+    (root: ReadonlyStorage) => getNote(root, selectedNoteId)?.fillColor,
     shallow
   );
 
   const selectedNoteStrokeColor: string | undefined = useStorage(
-    (root: ReadonlyStorage) => getNoteStrokeColor(root, selectedNoteId),
+    (root: ReadonlyStorage) => getNote(root, selectedNoteId)?.strokeColor,
     shallow
   );
 
@@ -266,30 +193,6 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
     open ? history.pause() : history.resume();
   }
 
-  function handleFillColorPickerOnChange(color: string | undefined) {
-    handleUpdateNote(selectedNoteId, { fillColor: color });
-  }
-
-  function handleStrokeColorPickerOnChange(color: string | undefined) {
-    handleUpdateNote(selectedNoteId, { strokeColor: color });
-  }
-
-  function handleFillColorInputOnChange(
-    e: ChangeEvent<HTMLInputElement> | undefined
-  ) {
-    if (e?.target.value) {
-      handleUpdateNote(selectedNoteId, { strokeColor: e.target.value });
-    }
-  }
-
-  function handleStrokeColorInputOnChange(
-    e: ChangeEvent<HTMLInputElement> | undefined
-  ) {
-    if (e?.target.value) {
-      handleUpdateNote(selectedNoteId, { strokeColor: e.target.value });
-    }
-  }
-
   return (
     <div
       ref={canvasRef}
@@ -346,13 +249,7 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
             sideOffset={24}
             disabled={!selectedNoteFillColor}
             onOpenChange={handleFillColorOpenChange}
-            content={
-              <ColorPicker
-                color={selectedNoteFillColor}
-                onPickerChange={handleFillColorPickerOnChange}
-                onInputChange={handleFillColorInputOnChange}
-              />
-            }
+            content={<WhiteboardFillControls noteId={selectedNoteId} />}
           >
             <div>
               <Tooltip content="Fill" sideOffset={16}>
@@ -372,13 +269,7 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
             sideOffset={24}
             disabled={!selectedNoteStrokeColor}
             onOpenChange={handleStrokeColorOpenChange}
-            content={
-              <ColorPicker
-                color={selectedNoteStrokeColor}
-                onPickerChange={handleStrokeColorPickerOnChange}
-                onInputChange={handleStrokeColorInputOnChange}
-              />
-            }
+            content={<WhiteboardStrokeControls noteId={selectedNoteId} />}
           >
             <div>
               <Tooltip content="Stroke" sideOffset={16}>

@@ -1,0 +1,9 @@
+.container {
+  margin: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: var(--size-xs);
+  padding-bottom: 0.5rem;
+}

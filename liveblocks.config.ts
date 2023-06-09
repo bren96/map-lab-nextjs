@@ -59,6 +59,7 @@ export type Note = {
   id: string;
   fillColor: string;
   strokeColor: string;
+  strokeWidth: number;
 };
 
 export type LiveNote = LiveObject<Note>;

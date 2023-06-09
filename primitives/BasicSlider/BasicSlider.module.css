@@ -1,0 +1,42 @@
+.SliderRoot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 10rem;
+  height: 1rem;
+}
+
+.SliderTrack {
+  background-color: rgb(var(--color-gray-750));
+  position: relative;
+  flex-grow: 1;
+  height: 3px;
+  border-radius: 3px;
+}
+
+.SliderRange {
+  position: absolute;
+  background-color: rgb(var(--color-white));
+  height: 100%;
+  border-radius: 3px;
+}
+
+.SliderThumb {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  background-color: rgb(var(--color-white));
+  box-shadow: var(--shadow-sm);
+  border-radius: 100%;
+}
+
+.SliderThumb:hover {
+  background-color: rgb(var(--color-gray-250));
+}
+
+.SliderThumb:focus {
+  outline: none;
+  box-shadow: var(--shadow);
+}
