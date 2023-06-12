@@ -46,7 +46,7 @@ export function WhiteboardFontControls({ noteId, onOpenChange }: Props) {
 
   return (
     <>
-      <div style={{ display: hidden ? "none" : null }}>
+      <div style={{ display: hidden ? "none" : undefined }}>
         <Select
           className={style.select}
           value={selectedNoteFontClassName}
