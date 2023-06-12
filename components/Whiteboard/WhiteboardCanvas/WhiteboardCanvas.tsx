@@ -273,12 +273,10 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
               </Tooltip>
             </div>
           </Popover>
-          <Tooltip content="Font Family" sideOffset={16}>
-            <WhiteboardFontControls
-              noteId={selectedNoteId}
-              onOpenChange={handleFontControlsOpenChange}
-            />
-          </Tooltip>
+          <WhiteboardFontControls
+            noteId={selectedNoteId}
+            onOpenChange={handleFontControlsOpenChange}
+          />
         </div>
       )}
     </div>
