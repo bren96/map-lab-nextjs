@@ -1,0 +1,14 @@
+.container {
+  margin: 1rem;
+  min-width: 10rem;
+}
+
+.label {
+  display: block;
+  font-size: var(--size-xs);
+  padding-bottom: 0.5rem;
+}
+
+.select {
+  width: 9rem;
+}

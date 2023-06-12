@@ -21,10 +21,7 @@ import {
   updateNote,
 } from "../../../lib/client/notes";
 import {
-  LiveNote,
-  Note,
   ReadonlyStorage,
-  UserInfo,
   UserMeta,
   useCanRedo,
   useCanUndo,
@@ -39,6 +36,7 @@ import { Tooltip } from "../../../primitives/Tooltip";
 import { useBoundingClientRectRef } from "../../../utils";
 import { Cursors } from "../../Cursors";
 import { WhiteboardFillControls } from "../WhiteboardFillControls";
+import { WhiteboardFontControls } from "../WhiteboardFontControls/WhiteboardFontControls";
 import { WhiteboardMap } from "../WhiteboardMap";
 import { WhiteboardNote } from "../WhiteboardNote";
 import { WhiteboardStrokeControls } from "../WhiteboardStrokeControls";
@@ -46,20 +44,6 @@ import styles from "./WhiteboardCanvas.module.css";
 
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
-}
-
-export function isNoteSelectedByUser(
-  note: Note,
-  userInfo: UserInfo | null
-): boolean {
-  return note.selectedBy === userInfo;
-}
-
-export function isLiveNoteSelectedByUser(
-  liveNote: LiveNote,
-  userInfo: UserInfo | null
-): boolean {
-  return liveNote.get("selectedBy") === userInfo;
 }
 
 export function Canvas({ currentUser, className, style, ...props }: Props) {
@@ -78,8 +62,8 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
   );
 
   const selectedNoteId: string | undefined = useStorage((root) => {
-    return Array.from(root.notes.values()).find((note) =>
-      isNoteSelectedByUser(note, currentUser)
+    return Array.from(root.notes.values()).find(
+      (note) => note.selectedBy === currentUser
     )?.id;
   }, shallow);
 
@@ -102,7 +86,7 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
 
   const clearUsersSelectedNote = useMutation(({ storage, self }) => {
     const noteId = Array.from(storage.get("notes").values())
-      .find((note) => isLiveNoteSelectedByUser(note, currentUser))
+      .find((note) => note.get("selectedBy") === currentUser)
       ?.get("id");
     if (noteId) {
       updateNote(storage, self, noteId, { selectedBy: null });
@@ -190,6 +174,10 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
   }
 
   function handleStrokeColorOpenChange(open: boolean) {
+    open ? history.pause() : history.resume();
+  }
+
+  function handleFontControlsOpenChange(open: boolean) {
     open ? history.pause() : history.resume();
   }
 
@@ -285,6 +273,12 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
               </Tooltip>
             </div>
           </Popover>
+          <Tooltip content="Font Family" sideOffset={16}>
+            <WhiteboardFontControls
+              noteId={selectedNoteId}
+              onOpenChange={handleFontControlsOpenChange}
+            />
+          </Tooltip>
         </div>
       )}
     </div>
