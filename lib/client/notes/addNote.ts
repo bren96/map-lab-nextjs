@@ -27,6 +27,7 @@ export function addNote(
     strokeColor: "#000",
     strokeWidth: 3,
     strokeOpacity: 1,
+    fontClassName: "",
   });
 
   storage.get("notes").set(note.get("id"), note);

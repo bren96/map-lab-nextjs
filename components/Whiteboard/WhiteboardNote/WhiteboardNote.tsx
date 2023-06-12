@@ -34,7 +34,6 @@ export const WhiteboardNote = memo(
     id,
     dragged,
     style,
-    className,
     onPointerDown,
     onDelete,
     onChange,
@@ -43,6 +42,9 @@ export const WhiteboardNote = memo(
   }: Props) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const note = useStorage((root) => root.notes.get(id));
+    const noteFontClassName = useStorage(
+      (root) => root.notes.get(id)?.fontClassName
+    );
 
     const handleDoubleClick = useCallback(() => {
       textAreaRef.current?.focus();
@@ -68,8 +70,8 @@ export const WhiteboardNote = memo(
 
     return (
       <div
-        className={clsx(className, styles.container)}
         data-note={id}
+        className={clsx(styles.container, noteFontClassName)}
         onDoubleClick={handleDoubleClick}
         onPointerDown={handlePointerDown}
         style={{
