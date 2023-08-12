@@ -56,6 +56,8 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
 
   const isReadOnly = useSelf((me) => me.isReadOnly);
 
+  const [isResizing, setIsResizing] = useState(false);
+
   const noteIds: string[] = useStorage(
     (root) => Array.from(root.notes.keys()),
     shallow
@@ -152,7 +154,7 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
 
   function handleCanvasPointerMove(e: PointerEvent<HTMLDivElement>) {
     e.preventDefault();
-    if (isDragging && dragInfo.current) {
+    if (!isResizing && isDragging && dragInfo.current) {
       handleUpdateNote(dragInfo.current.noteId, {
         x: e.clientX - rectRef.current.x - dragInfo.current.offset.x,
         y: e.clientY - rectRef.current.y - dragInfo.current.offset.y,
@@ -181,6 +183,21 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
     open ? history.pause() : history.resume();
   }
 
+  function handleNoteResizeStart() {
+    history.pause();
+    handleCanvasPointerUp();
+    setIsResizing(true);
+  }
+
+  function handleNoteResizeStop() {
+    setIsResizing(false);
+    history.resume();
+  }
+
+  function handleNoteResize() {
+    setIsResizing(true);
+  }
+
   return (
     <div
       ref={canvasRef}
@@ -200,10 +217,13 @@ export function Canvas({ currentUser, className, style, ...props }: Props) {
           id={id}
           key={id}
           dragged={id === dragInfo?.current?.noteId}
-          onChange={(e) => handleNoteTextChange(e, id)}
+          onTextAreaChange={(e) => handleNoteTextChange(e, id)}
           onDelete={() => handleDeleteNote(id)}
           onPointerDown={(e) => handleNotePointerDown(e, id)}
           onSelect={() => handleNoteSelect(id)}
+          onResizeStart={handleNoteResizeStart}
+          onResizeStop={handleNoteResizeStop}
+          onResize={handleNoteResize}
         />
       ))}
       {!isReadOnly && (

@@ -28,6 +28,8 @@ export function addNote(
     strokeWidth: 3,
     strokeOpacity: 1,
     fontClassName: "",
+    height: 100,
+    width: 200,
   });
 
   storage.get("notes").set(note.get("id"), note);

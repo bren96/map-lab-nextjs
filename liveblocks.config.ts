@@ -63,6 +63,8 @@ export type Note = {
   strokeWidth: number;
   strokeOpacity: number;
   fontClassName: string;
+  height: number;
+  width: number;
 };
 
 export type LiveNote = LiveObject<Note>;
